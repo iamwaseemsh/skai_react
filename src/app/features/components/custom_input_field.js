@@ -3,9 +3,11 @@ import { InputText } from 'primereact/inputtext'
 import { classNames } from 'primereact/utils';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Dropdown } from 'primereact/dropdown';
+import { MultiSelect } from 'primereact/multiselect';
 
 
-export default function CustomInputField({ iden, formik, type = 'text', className, label, placeHolder, options, optionLabel, optionValue }) {
+
+export default function CustomInputField({ iden, formik, type = 'text', className, label, placeHolder, options, optionLabel, optionValue,value,onChange }) {
 
     function titleCase(str) {
         return str.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
@@ -17,18 +19,21 @@ export default function CustomInputField({ iden, formik, type = 'text', classNam
     };
     return (
         <div className={`field ${className}`}>
-            <label htmlFor="name1">{label || titleCase(iden)}</label>
+            <label className='text-white' htmlFor="name1">{label || titleCase(iden)}</label>
 
             {
                 type === 'dropdown' ?
-                    <Dropdown placeholder={placeHolder} id={iden} name={iden} options={options} optionLabel={optionLabel} optionValue={optionValue} value={formik.values[iden]} onChange={formik.handleChange} className={classNames({ 'p-invalid': isFormFieldValid({ iden }) })} />
+                    <Dropdown  placeholder={placeHolder} id={iden} name={iden} options={options} optionLabel={optionLabel} optionValue={optionValue} value={formik.values[iden]} onChange={formik.handleChange} className={classNames('customInput',{ 'p-invalid': isFormFieldValid({ iden }) })} />
+
+                    :type==='multiSelect'?
+                    <MultiSelect  placeholder={placeHolder} id={iden} name={iden} options={options} optionLabel={optionLabel} optionValue={optionValue} value={formik.values[iden]} onChange={formik.handleChange} className={classNames('customInput',{ 'p-invalid': isFormFieldValid({ iden }) })} />
 
                     :
                     (type === 'textArea'||type==='textarea') ?
-                        <InputTextarea id={iden} name={iden} value={formik.values[iden]} onChange={formik.handleChange} type="text" placeholder={placeHolder} className={classNames({ 'p-invalid': isFormFieldValid({ iden }) })} />
+                        <InputTextarea id={iden} name={iden} value={formik.values[iden]} onChange={formik.handleChange} type="text" placeholder={placeHolder} className={classNames('customInput',{ 'p-invalid': isFormFieldValid({ iden }) })} />
 
                         :
-                        <InputText id={iden} name={iden} value={formik.values[iden]} onChange={formik.handleChange} type={type} placeholder={placeHolder} className={classNames({ 'p-invalid': isFormFieldValid({ iden }) })} />
+                        <InputText autoComplete='off' autoSave='off' id={iden} name={iden} value={formik.values[iden]} onChange={formik.handleChange} type={type} placeholder={placeHolder} className={classNames('customInput',{ 'p-invalid': isFormFieldValid({ iden }) })} />
 
             }
             {getFormErrorMessage(iden)}
